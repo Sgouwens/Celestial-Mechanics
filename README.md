@@ -1,4 +1,4 @@
-# celestial_mechanics
+# Celestial Mechanics
 Modelling solar systems using numerical methods and Newtonian physics. A PyGame is made to display the motion of the planets of our solar system. Different controls are added to speed up the simulation or to increase the gravitational force, or to change the perspective to where Earth is the centerpoint of the solar system. 
 
 The most important law is the second law of motion: $F=ma$. In gravitational physics, the force applied between masses is quantified by the following formula.
