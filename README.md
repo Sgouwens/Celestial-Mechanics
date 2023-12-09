@@ -9,4 +9,4 @@ When two distinct objects are close, i.e., their euclidean distance is smaller t
 $$m_{new}v_{new} = m_0v_0 + m_1v_1$$
 After the collision, we assume the masses are combined and no other fragments are resulting from the collision. The new object has a mass of $m_0+m_1$, with momentum m_{new}v_{new}. From this, the speed of the new object is computed:
 $$v_{new} = \frac{m_0v_0 + m_1v_1}{m_0+m_1}$$
-Since each object is modelled as a point mass, the new objects location also needs a position. By convention, this is chosen to be the midpoint of the two objects: \frac12(x_0+x_1).
+Since each object is modelled as a point mass, the new objects location also needs a position. By convention, this is chosen to be the midpoint of the two objects: $\frac12(x_0+x_1)$.
