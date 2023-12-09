@@ -30,27 +30,42 @@ def initial_conditions(type = 'Solar System'):
         body_masses = 1e24*np.array([19890000, 0.330, 4.87, 5.97, 0.642, 1898, 568, 86.8, 102])
         
     elif type == 'Random Solar System':
-        pass
+        n_objects = 200
         
-    elif type == 'Multiple suns':
-        number_of_suns = 2
-        phi_suns = np.linspace(0,2*np.pi, num=number_of_suns+1)[:-1]
-
-        phi = np.concatenate((phi_suns, np.array([1.22, 5.23, 1.2])))
+        phi = np.random.uniform(0, np.pi, n_objects)
 
         angles_position = [np.array([np.sin(angle),np.cos(angle)]) for angle in phi]
         angles_velocity = [np.array([np.cos(-angle),np.sin(-angle)]) for angle in phi]
 
-        msun, xsun, vsun = 3e7, 30, 35
-
-        body_names = np.concatenate((np.array(number_of_suns*['Sun']), np.array(['Venus', 'Earth', 'Mars'])))
-                              
-        body_positions = 1e9*np.concatenate((xsun * np.ones(number_of_suns), np.array([150, 135, 170])))
+        body_names = ['Particle ' + str(k) for k in range(n_objects)]
+        body_positions = 1e9*np.random.uniform(-10, 10, n_objects)
         body_positions = [distances*angles for angles, distances in zip(angles_position, body_positions)]
 
-        body_velocities = 1000*np.concatenate((vsun * np.ones(number_of_suns), np.array([39.0, 45, 30])))
+        body_velocities = 10*np.random.normal(0, 23, n_objects) #
         body_velocities = [distances*angles for angles, distances in zip(angles_velocity, body_velocities)]
 
-        body_masses = 1e24*np.concatenate((msun * np.ones(number_of_suns), [5.87, 5.97, 2.642]))
+        body_masses = 1e21*np.random.normal(40,5, n_objects)
+        
+        
+    elif type == 'Multiple suns':
+        number_of_suns = 4
+        phi_suns = np.linspace(0,2*np.pi, num=number_of_suns+1)[:-1]
+
+        phi = np.concatenate((phi_suns, np.random.uniform(0, 2*np.pi, 9)))
+
+        angles_position = [np.array([np.sin(angle),np.cos(angle)]) for angle in phi]
+        angles_velocity = [np.array([np.cos(-angle),np.sin(-angle)]) for angle in phi]
+
+        msun, xsun, vsun = 3e7/number_of_suns, 20/np.sqrt(number_of_suns), 30*np.sqrt(number_of_suns) ####
+
+        body_names = np.concatenate((np.array(number_of_suns*['Sun']), np.array(['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'])))
+                              
+        body_positions = 1e9*np.concatenate((xsun * np.ones(number_of_suns), np.array([57.9, 108.2, 149.6, 228.0, 778.5, 1432.0, 2867, 4515])))
+        body_positions = [distances*angles for angles, distances in zip(angles_position, body_positions)]
+
+        body_velocities = 1000*np.concatenate((vsun * np.ones(number_of_suns), np.array([60, 35.0, 29.8, 24.1, 13.1, 9.7, 6.8, 5.4])))
+        body_velocities = [distances*angles for angles, distances in zip(angles_velocity, body_velocities)]
+
+        body_masses = 1e24*np.concatenate((msun * np.ones(number_of_suns), [0.330, 4.87, 5.97, 0.642, 1898, 568, 86.8, 102]))
         
     return body_names, body_positions, body_velocities, body_masses

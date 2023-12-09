@@ -73,7 +73,7 @@ class Celestial:
         """This function kills dinosaurs. Self gains mass of the planet it
         collided with, conservation of momentum is used to determine the new 
         velocity vector."""
-        if np.linalg.norm(self.position - other.position) < 10e9: # use radii.
+        if np.linalg.norm(self.position - other.position) < 4e9: # use radii.
         
             if not other.collided:
                 
