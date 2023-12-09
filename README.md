@@ -3,14 +3,11 @@ Modelling solar systems using numerical methods and Newtonian physics. A PyGame 
 
 The most important law is the second law of motion: $F=ma$. In gravitational physics, the force applied between masses is quantified by the following formula.
 $$F = ma = -G\frac{mM}{r^2}$$
-where the acceleration $a$ is the second time-derivative of the position, $\frac{d^2x(t)}{dt^2}=a(t)$. Furthermore, $G$ is the gravitational constant.
+where the acceleration $a$ is the second time-derivative of the position, $\frac{d^2x(t)}{dt^2}=a(t)$. Furthermore, $G$ is the gravitational constant. 
 
 The implicit euler forward method is applied to get a reasonably stable numerical result. To do so, the second order ODE needs to be translated into a system of first order ODE's, which can be solved:
-$$\frac{dx(t)}{dt} = v(t)\\
-\frac{dv(t)}{dt} = a(t) = -G\frac{mM}{r^2}$$
-
-
-
+$$\frac{dx(t)}{dt} = v(t)$$
+$$\frac{dv(t)}{dt} =-G\frac{M}{r^2}$$
 
 When two distinct objects are close, i.e., their euclidean distance is smaller than a given contant, we model this as a collision.  Physical laws such as conservation of momentum need to be respected. In short, this means that the combined momentum before the collision must equal the momentum after the collision. Say the objects have masses $m_0$ and $m_1$ and velocity vectors $v_0$ and $v_1$. The total energy equals 
 $$m_{new}v_{new} = m_0v_0 + m_1v_1$$
