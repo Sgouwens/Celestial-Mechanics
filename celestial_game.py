@@ -1,17 +1,15 @@
-
 import pygame
 import matplotlib.pyplot as plt
 import numpy as np
 
-#from celestial import Celestial, System
-#from initial_positions import initial_conditions
+from celestial import Celestial, System
+from initial_positions import initial_conditions
 
 G = 6.6743*1e-11
 step_size = 720
 
-body_names, body_positions, body_velocities, body_masses = initial_conditions(type = 'Solar System')
-#body_names, body_positions, body_velocities, body_masses = initial_conditions(type = 'Random Solar System')
-
+body_names, body_positions, body_velocities, body_masses = initial_conditions(type='Solar System')
+#body_names, body_positions, body_velocities, body_masses = initial_conditions(type='Random Solar System')
 
 system = System(body_names, body_positions, body_velocities, body_masses)
 
@@ -52,10 +50,10 @@ while running:
                 print('Stepsize changed to: ', step_size)
             if event.key == pygame.K_RIGHT:
                 G *= 1.5  # Increase gravitational constant by 5%
-                print('Gravitational constant is now multiplied by: ', round(G/(6.6743*1e-11),1))
+                print('Grav. const. multiplied by: ', round(G/(6.6743*1e-11),1))
             if event.key == pygame.K_LEFT:
                 G /= 1.5  # Decrease gravitational constant by 5%
-                print('Gravitational constant is now multiplied by: ', round(G/(6.6743*1e-11),1))
+                print('Grav. const. multiplied by: ', round(G/(6.6743*1e-11),1))
             if event.key == pygame.K_q:
                 print("Zoom out")
                 screen.fill(background_color)
@@ -73,11 +71,9 @@ while running:
                 screen.fill(background_color)
                 earth_at_center = 1  # Decrease gravitational constant by 5%
                 
-                            
-    #screen.fill(background_color)
-
     # Compute next step and handle collision
-    system.system_euler_backward()
+    system.system_euler_backward(stepsize=step_size)
+    
     pos_earth = system.objects[3].position
     pos_sun = np.vstack((pos_sun, system.objects[0].position))
     

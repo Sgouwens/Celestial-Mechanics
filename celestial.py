@@ -20,7 +20,9 @@ class Celestial:
         self.velocity_new = 0
         self.old_positions = []
         self.collided = False
-        self.color = (np.random.uniform(0,255), np.random.uniform(0,255) , np.random.uniform(0,255))
+        self.color = (np.random.uniform(0,255), 
+                      np.random.uniform(0,255) , 
+                      np.random.uniform(0,255))
         
     #@jit    
     def gravitational_force(self, other, backward=False):
@@ -41,7 +43,7 @@ class Celestial:
         return force_magnitude * force_direction
         
     # Easy numerical method that updates updates velocity and location
-    def euler_forward(self, other, backward=False):
+    def euler_forward(self, other, stepsize=step_size, backward=False):
         """Given the gravitational force, impact on velocity and position are approximated
         Summetry of forces is applied"""
         
@@ -49,10 +51,10 @@ class Celestial:
         force_to_other = force / self.mass
         force_to_self = - force / other.mass
         
-        self.velocity_step = self.velocity_step + step_size * force_to_other
-        self.position_step = self.position_step + step_size * self.velocity            
-        other.velocity_step = other.velocity_step + step_size * force_to_self
-        other.position_step = other.position_step + step_size * other.velocity
+        self.velocity_step = self.velocity_step + stepsize * force_to_other
+        self.position_step = self.position_step + stepsize * self.velocity            
+        other.velocity_step = other.velocity_step + stepsize * force_to_self
+        other.position_step = other.position_step + stepsize * other.velocity
         
     def apply_gravitational_forces(self, backward=False):
         """Given the gravitational effects of all other entities, the velocity
@@ -76,9 +78,7 @@ class Celestial:
         if np.linalg.norm(self.position - other.position) < 4e9: # use radii.
         
             if not other.collided:
-                
                 print('Oh no!', self.name, 'collided with', other.name)
-                
                 self.mass = self.mass + other.mass
                 self.velocity = (self.mass*self.velocity + other.mass*other.velocity)/(self.mass+other.mass)
                 self.position = (self.position + other.position)/2
@@ -90,45 +90,46 @@ class System:
     This class contains the functions that apply the individual behaviour to all objects
     to model the groups behaviour."""
     
-    def __init__(self, names, positions, velocities, masses):
+    def __init__(self, names, positions, velocities, masses, collisions=True):
         self.objects = [Celestial(name, position, velocity, mass) \
                         for name, position, velocity, mass \
                             in zip(names, positions,velocities, masses)]
-        self.objects = self.objects
+            
+        self.collisions = collisions
 
     def __add__(self, body):
         """This function should add an asteroid to the system"""
         pass
-     
+         
     def shoot_asteroid(self):
-        """This function should add on the pygame on mouse-click"""
+        """This function should add in the pygame on mouse-click"""
         pass
             
-    def system_euler_forward(self):
+    def system_euler_forward(self, stepsize):
         """Applies the euler forward method to each object"""
         for obj1, obj2 in combinations(self.objects, 2):
-            obj1.euler_forward(obj2)
-            #obj1.collision(obj2) # should be in a separate loop AFTER apply_grav.
+            obj1.euler_forward(obj2, stepsize)
         
         for obj in self.objects:
             obj.apply_gravitational_forces() 
             
-    def system_euler_backward(self):
-        """Having computed all effects, we need to"""
+    def system_euler_backward(self, stepsize=step_size):
+        """Having computed all effects, we need to apply the numerical method"""
         for obj1, obj2 in combinations(self.objects, 2):
-            obj1.euler_forward(obj2, backward=False)# saves in *_step
+            obj1.euler_forward(obj2, stepsize, backward=False) # saves in *_step
             
         for obj in self.objects:
             obj.apply_gravitational_forces(backward=True) 
                         
         for obj1, obj2 in combinations(self.objects, 2):
-            obj1.euler_forward(obj2, backward=True)
+            obj1.euler_forward(obj2, stepsize, backward=True)
             
         for obj in self.objects:
             obj.apply_gravitational_forces(backward=False) 
-            
-        for obj1, obj2 in combinations(self.objects, 2):
-            obj1.collision(obj2)
+           
+        if self.collisions:
+            for obj1, obj2 in combinations(self.objects, 2):
+                obj1.collision(obj2)
             
     def remove_collided_bodies(self):
         """Removes all objects that have been collided. All mass is transferred
